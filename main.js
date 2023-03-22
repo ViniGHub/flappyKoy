@@ -348,7 +348,7 @@ function ColideCorg(koy, obj) {
 
     if (koyX > obj.borgTop.DX &&
         koyX < obj.borgTop.DX + obj.borgTop.Width &&
-        koyY < obj.borgTop.DY + obj.borgTop.Height) {
+        koyY < obj.borgTop.DY + obj.borgTop.Height + 150) {
         return true;
     }else if (koyX > obj.borgBottom.DX &&
         koyX < obj.borgBottom.DX + obj.borgBottom.Width &&
