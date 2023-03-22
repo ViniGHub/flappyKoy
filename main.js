@@ -2,6 +2,12 @@
 const spriteKoy = new Image();
 spriteKoy.src = './Images/Koy.png';
 
+const spriteKoy1 = new Image();
+spriteKoy1.src = './Images/Koy1.png';
+
+const spriteKoy2 = new Image();
+spriteKoy2.src = './Images/Koy2.png';
+
 const spriteChao = new Image();
 spriteChao.src = './Images/chao.png';
 
@@ -12,7 +18,10 @@ const spriteReady = new Image();
 spriteReady.src = './Images/getReadyTela.png';
 
 const spriteReinicia = new Image();
-spriteReinicia.src = './Images/reinicia.png'
+spriteReinicia.src = './Images/reinicia.png';
+
+const spriteCorg = new Image();
+spriteCorg.src = './Images/Corg.png'
 // fim Declaração sprites
 
 // Sons 
@@ -28,7 +37,7 @@ somImpacto.volume = ".5"
 
 // Fim sons
 
-
+let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
 
@@ -37,10 +46,10 @@ function setKoy() {
     const flappyKoy = {
         SX: 0,
         SY: 0,
-        HeightS: 350,
-        WidthS: 270,
-        Width: 80,
-        Height: 80,
+        HeightS: 735,
+        WidthS: 600,
+        Width: 150,
+        Height: 200,
         aceleracao: .035,
         velocidade: 0,
         pulo: 2.25,
@@ -65,10 +74,39 @@ function setKoy() {
             somPulo.play();
         },
 
+        frameAtual: 1,
+
+        movimentos: [
+            spriteKoy,
+            spriteKoy1,
+            spriteKoy2
+        ],
+
+        baseIncremento: 1,
+        attFrame() {
+            const intervaloFrame = 30;
+            const passouInt = frames % intervaloFrame;
+
+            if (passouInt == 0) {
+
+                if (this.frameAtual == 2) {
+                    this.baseIncremento = -1;
+                } else if (this.frameAtual == 0) {
+                    this.baseIncremento = 1;
+                }
+                const incremento = this.baseIncremento + this.frameAtual;
+                const baseRepet = this.movimentos.length;
+                this.frameAtual = incremento % baseRepet;
+
+            }
+
+        },
+
         desenha() {
 
+            this.attFrame();
             contexto.drawImage(
-                spriteKoy,
+                this.movimentos[this.frameAtual],
                 flappyKoy.SX, flappyKoy.SY,
                 flappyKoy.WidthS, flappyKoy.HeightS,
                 flappyKoy.DX, flappyKoy.DY,
@@ -80,6 +118,7 @@ function setKoy() {
     };
     return flappyKoy;
 }
+
 
 
 function setChao() {
@@ -115,18 +154,49 @@ function setChao() {
         },
 
         chaoMove() {
-            const movimento = 1;
+            const moveChao = 1;
             const resetChao = chao.Width;
 
-            this.DX -= movimento;
+            this.DX -= moveChao;
             if (this.DX <= -(resetChao)) {
                 this.DX = 0;
-                console.log("ola");
 
             }
         }
     }
     return chao;
+};
+
+const Corg = {
+    SX: 0,
+    SY: 0,
+    DX: canvas.width - 300,
+    DY: 400,
+    HeightS: 680,
+    WidthS: 270,
+    Width: 150,
+    Height: 500,
+
+
+    desenha() {
+        contexto.drawImage(
+            spriteCorg,
+            this.SY, this.SX,
+            this.WidthS, this.HeightS,
+            this.DX, this.DY,
+            this.Width, this.Height
+
+        )
+    },
+
+    moveCorg() {
+        this.DX -= 5;
+        if (this.DX == -200) {
+            this.DX = canvas.width;
+        }
+
+    }
+
 };
 
 
@@ -241,7 +311,7 @@ function mudaTela(novaTela) {
 
     if (telaAtiva.inicializa) {
         telaAtiva.inicializa();
-        
+
     }
 }
 
@@ -251,7 +321,7 @@ const Telas = {
         inicializa() {
             globais.flappyKoy = setKoy();
             globais.chao = setChao();
-            
+
         },
 
         desenha() {
@@ -259,10 +329,12 @@ const Telas = {
             fundo.desenha();
             globais.flappyKoy.desenha();
             getReady.desenha();
+            Corg.desenha();
         },
 
         atualiza() {
             globais.chao.chaoMove();
+            Corg.moveCorg();
         },
 
         spaceDown() {
@@ -317,7 +389,7 @@ function loop() {
         telaAtiva.atualiza();
     }
 
-
+    frames++;
     requestAnimationFrame(loop);
 }
 
