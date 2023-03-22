@@ -22,6 +22,9 @@ spriteReinicia.src = './Images/reinicia.png';
 
 const spriteCorg = new Image();
 spriteCorg.src = './Images/Corg.png'
+
+const spriteGroc = new Image();
+spriteGroc.src = './Images/Groc.png'
 // fim Declaração sprites
 
 // Sons 
@@ -154,7 +157,7 @@ function setChao() {
         },
 
         chaoMove() {
-            const moveChao = 1;
+            const moveChao = 2.5;
             const resetChao = chao.Width;
 
             this.DX -= moveChao;
@@ -171,28 +174,44 @@ const Corg = {
     SX: 0,
     SY: 0,
     DX: canvas.width - 300,
-    DY: 400,
+    DY: Math.round((Math.random() * 800)+ 300),
     HeightS: 680,
     WidthS: 270,
     Width: 150,
-    Height: 500,
-
+    Height: 600,
 
     desenha() {
-        contexto.drawImage(
-            spriteCorg,
-            this.SY, this.SX,
-            this.WidthS, this.HeightS,
-            this.DX, this.DY,
-            this.Width, this.Height
+        if (this.DY >= 780) {
+            this.DY = 770;
+        } else if (this.DY <= 320) {
+            this.DY = 350;
 
-        )
+        }
+            
+        
+        contexto.drawImage(
+                spriteCorg,
+                this.SY, this.SX,
+                this.WidthS, this.HeightS,
+                this.DX, this.DY,
+                this.Width, this.Height
+            ),
+
+            contexto.drawImage(
+                spriteGroc,
+                this.SY, this.SX,
+                this.WidthS, this.HeightS,
+                this.DX, this.DY - 900,
+                this.Width, this.Height
+            )
     },
 
     moveCorg() {
-        this.DX -= 5;
+        this.DX -= 2.5;
         if (this.DX == -200) {
             this.DX = canvas.width;
+            this.DY = Math.round((Math.random() * 800) + 300);
+            console.log(this.DY);
         }
 
     }
@@ -329,12 +348,12 @@ const Telas = {
             fundo.desenha();
             globais.flappyKoy.desenha();
             getReady.desenha();
-            Corg.desenha();
+
         },
 
         atualiza() {
             globais.chao.chaoMove();
-            Corg.moveCorg();
+
         },
 
         spaceDown() {
@@ -350,11 +369,13 @@ const Telas = {
             fundo.desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
+            Corg.desenha();
         },
 
         atualiza() {
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
+            Corg.moveCorg();
         },
 
         spaceDown() {
@@ -367,6 +388,7 @@ const Telas = {
     Reinicio: {
         desenha() {
             fundo.desenha();
+            Corg.desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
             reinicia.desenha();
@@ -374,6 +396,8 @@ const Telas = {
 
         rDown() {
             mudaTela(Telas.Inicio)
+            Corg.DX = canvas.width;
+
 
         }
     }
