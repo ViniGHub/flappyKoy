@@ -10,10 +10,17 @@ body {
     justify-content: center;
     height: 100vh;
     width: 100vw;
+    flex-direction: column;
 }
 
 #flappyKoy {
     border: 2px solid #000;
     display: block;
     margin: 0 auto;
+}
+
+#score {
+    position: absolute;
+    top: 20px;
+    font-size: 50px;
 }

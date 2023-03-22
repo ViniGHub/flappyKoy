@@ -40,6 +40,7 @@ somImpacto.volume = ".5"
 
 // Fim sons
 
+let pontos = 0;
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
@@ -55,12 +56,12 @@ function setKoy() {
         Height: 200,
         aceleracao: .035,
         velocidade: 0,
-        pulo: 2.25,
+        pulo: 2.5,
         DX: (canvas.width / 5),
         DY: (canvas.height / 2),
 
         atualiza() {
-            if (fazColisao(flappyKoy, globais.chao)) {
+            if (ColideChao(flappyKoy, globais.chao) || ColideCorg(flappyKoy, corg[0]) || ColideCorg(flappyKoy, corg[1]) || ColideCorg(flappyKoy, corg[2]) || ColideCorg(flappyKoy, corg[3])) {
                 mudaTela(Telas.Reinicio)
                 somImpacto.play();
 
@@ -72,7 +73,7 @@ function setKoy() {
 
         },
 
-        pula() {
+        pula() { 
             this.velocidade = -this.pulo;
             somPulo.play();
         },
@@ -170,54 +171,78 @@ function setChao() {
     return chao;
 };
 
-const Corg = {
-    SX: 0,
-    SY: 0,
-    DX: canvas.width - 300,
-    DY: Math.round((Math.random() * 800)+ 300),
-    HeightS: 680,
-    WidthS: 270,
-    Width: 150,
-    Height: 600,
+class Corg {
+    borgBottom = {
+        SX: 0,
+        SY: 0,
+        DX: canvas.width,
+        DY: Math.round((Math.random() * 600) + 300),
+        HeightS: 680,
+        WidthS: 270,
+        Width: 150,
+        Height: 600,
+    }
+
+    borgTop = {
+        SX: 0,
+        SY: 0,
+        DX: canvas.width,
+        DY: this.borgBottom.DY - 900,
+        HeightS: 680,
+        WidthS: 270,
+        Width: 150,
+        Height: 600,
+    }
 
     desenha() {
-        if (this.DY >= 780) {
-            this.DY = 770;
-        } else if (this.DY <= 320) {
-            this.DY = 350;
+        if (this.borgTop.DY <= -590) {
+            this.borgTop.DY = -580;
+            this.borgBottom.DY = this.borgTop.DY + 900;
+        } else if (this.borgBottom.DY >= 780) {
+            this.borgBottom.DY = 770;
+            this.borgTop.DY = this.borgBottom.DY - 900;
 
         }
-            
-        
+
         contexto.drawImage(
                 spriteCorg,
-                this.SY, this.SX,
-                this.WidthS, this.HeightS,
-                this.DX, this.DY,
-                this.Width, this.Height
+                this.borgBottom.SY, this.borgBottom.SX,
+                this.borgBottom.WidthS, this.borgBottom.HeightS,
+                this.borgBottom.DX, this.borgBottom.DY,
+                this.borgBottom.Width, this.borgBottom.Height
             ),
 
             contexto.drawImage(
                 spriteGroc,
-                this.SY, this.SX,
-                this.WidthS, this.HeightS,
-                this.DX, this.DY - 900,
-                this.Width, this.Height
+                this.borgTop.SY, this.borgTop.SX,
+                this.borgTop.WidthS, this.borgTop.HeightS,
+                this.borgTop.DX, this.borgTop.DY,
+                this.borgTop.Width, this.borgTop.Height
             )
-    },
+    };
 
     moveCorg() {
-        this.DX -= 2.5;
-        if (this.DX == -200) {
-            this.DX = canvas.width;
-            this.DY = Math.round((Math.random() * 800) + 300);
-            console.log(this.DY);
+        this.borgBottom.DX -= 2.5;
+        this.borgTop.DX -= 2.5;
+
+        if (this.borgBottom.DX == -200) {
+            this.borgBottom.DX = canvas.width;
+            this.borgTop.DX = canvas.width;
+            this.borgBottom.DY = Math.round((Math.random() * 600) + 300);
+            this.borgTop.DY = this.borgBottom.DY - 900;
+
+            console.log(this.borgTop.DY);
+        }
+        if (this.borgBottom.DX == 200) {
+
+            pontos++;
         }
 
     }
 
 };
 
+let corg = [new Corg(), new Corg(), new Corg(), new Corg()];
 
 let fundo = {
     SX: 0,
@@ -308,13 +333,31 @@ const reinicia = {
 
 // Colisão
 
-function fazColisao(koy, obj) {
+function ColideChao(koy, obj) {
     const koyY = koy.DY + koy.Height;
     if (koyY >= obj.DY) {
         return true;
     } else
-
         return false;
+
+}
+
+function ColideCorg(koy, obj) {
+    const koyX = koy.DX + koy.Width;
+    const koyY = koy.DY + koy.Height;
+
+    if (koyX > obj.borgTop.DX &&
+        koyX < obj.borgTop.DX + obj.borgTop.Width &&
+        koyY < obj.borgTop.DY + obj.borgTop.Height) {
+        return true;
+    }else if (koyX > obj.borgBottom.DX &&
+        koyX < obj.borgBottom.DX + obj.borgBottom.Width &&
+        koyY > obj.borgBottom.DY) {
+        return true;
+
+    }else {
+        return false;
+    }
 
 }
 
@@ -367,15 +410,29 @@ const Telas = {
     Jogo: {
         desenha() {
             fundo.desenha();
+            corg[0].desenha();
+            corg[1].desenha();
+            corg[2].desenha();
+            corg[3].desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
-            Corg.desenha();
+
         },
 
         atualiza() {
+            corg[0].moveCorg();
+            if (corg[0].borgBottom.DX <= 1000 || corg[1].borgBottom.DX != canvas.width) {
+                corg[1].moveCorg();
+            }
+            if (corg[1].borgBottom.DX <= 1000 || corg[2].borgBottom.DX != canvas.width) {
+                corg[2].moveCorg();
+            }
+            if (corg[2].borgBottom.DX <= 1000 || corg[3].borgBottom.DX != canvas.width) {
+                corg[3].moveCorg
+            }
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
-            Corg.moveCorg();
+
         },
 
         spaceDown() {
@@ -388,7 +445,10 @@ const Telas = {
     Reinicio: {
         desenha() {
             fundo.desenha();
-            Corg.desenha();
+            corg[0].desenha();
+            corg[1].desenha();
+            corg[2].desenha();
+            corg[3].desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
             reinicia.desenha();
@@ -396,7 +456,10 @@ const Telas = {
 
         rDown() {
             mudaTela(Telas.Inicio)
-            Corg.DX = canvas.width;
+            corg.forEach(element => {
+                element.borgBottom.DX = canvas.width;
+                element.borgTop.DX = canvas.width;
+            });
 
 
         }
