@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,12 +17,26 @@
 
     <link rel="stylesheet" href="./CSS/style.css">
 </head>
+
 <body>
     <div class="container">
+        <div id="telaPerson">
+            <label for="person">Escolha o seu personagem</label>
+            <select name="person" id="person">
+                <option disabled selected value="">Personagens</option>
+                <option value="koki">koki</option>
+                <option value="mon">mon</option>
+                <option value="gigo">gigo</option>
+            </select>
+            <input value="Escolher" id="btnPerson" type="button">
+        </div>
+
+
         <canvas width="1500" height="900" id="flappyKoy"></canvas>
         <h1 id="score">0</h1>
     </div>
-    
+
     <script src="./main.js"></script>
 </body>
+
 </html>

@@ -20,11 +20,20 @@ spriteReady.src = './Images/getReadyTela.png';
 const spriteReinicia = new Image();
 spriteReinicia.src = './Images/reinicia.png';
 
+// Os doente
+
+const spriteGigo = new Image();
+spriteGigo.src = './Images/gigo.png';
+
+const spriteMon = new Image();
+spriteMon.src = './images/mon.png';
+
 const spriteCorg = new Image();
-spriteCorg.src = './Images/Corg.png'
+spriteCorg.src = './Images/Corg.png';
 
 const spriteGroc = new Image();
-spriteGroc.src = './Images/Groc.png'
+spriteGroc.src = './Images/Groc.png';
+
 // fim Declaração sprites
 
 // Sons 
@@ -40,11 +49,34 @@ somImpacto.volume = ".5"
 
 // Fim sons
 
+// variaveis gerais
+let personEsc = "koki";
+let velocidadeGame = 2.5;
 let pontos = 0;
 let score = document.querySelector('#score');
+
+let Escolheu = false;
+let btnEsc = document.querySelector('#btnPerson');
+let person = document.querySelector('#person');
+let telaPerson = document.querySelector('#telaPerson');
+
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
+// Fim variaveis gerais
+
+// Definição personagem
+btnEsc.addEventListener('click', function () {
+    personEsc = person.value;
+
+    if (personEsc != "") {
+        telaPerson.style.top = '-1000px';
+        Escolheu = true;
+    }
+
+})
+
+// Fim Definição personagem
 
 // Desenha Sprites
 function setKoy() {
@@ -57,7 +89,7 @@ function setKoy() {
         Height: 200,
         aceleracao: .2,
         velocidade: 0,
-        pulo: 5,
+        pulo: 2.5,
         DX: (canvas.width / 5),
         DY: (canvas.height / 2),
 
@@ -74,27 +106,56 @@ function setKoy() {
 
         },
 
-        pula() { 
+        pula() {
             this.velocidade = -this.pulo;
             somPulo.play();
         },
 
         frameAtual: 1,
 
-        movimentos: [
-            spriteKoy,
-            spriteKoy1,
-            spriteKoy2
-        ],
+        movimentos: [],
+
+        definePerson() {
+            if (personEsc == "koki") {
+                this.movimentos = [
+                    spriteKoy,
+                    spriteKoy1,
+                    spriteKoy2
+
+                ];
+                return this.movimentos;
+            }
+
+            if (personEsc == "mon") {
+                this.movimentos = [
+                    spriteMon,
+                    spriteMon,
+                    spriteMon
+                ]
+                this.WidthS = 900;
+                return this.movimentos;
+            }
+
+            if (personEsc == "gigo") {
+                this.movimentos = [
+                    spriteGigo,
+                    spriteGigo,
+                    spriteGigo
+                ]
+
+                return this.movimentos;
+            }
+
+        },
 
         baseIncremento: 1,
         attFrame() {
-            const intervaloFrame = 10;
+            const intervaloFrame = 30;
             const passouInt = frames % intervaloFrame;
 
             if (passouInt == 0) {
 
-                if (this.frameAtual == 2) {
+                if (this.frameAtual == this.movimentos.length - 1) {
                     this.baseIncremento = -1;
                 } else if (this.frameAtual == 0) {
                     this.baseIncremento = 1;
@@ -108,10 +169,10 @@ function setKoy() {
         },
 
         desenha() {
-
+            this.definePerson();
             this.attFrame();
             contexto.drawImage(
-                this.movimentos[this.frameAtual],
+                this.definePerson()[this.frameAtual],
                 flappyKoy.SX, flappyKoy.SY,
                 flappyKoy.WidthS, flappyKoy.HeightS,
                 flappyKoy.DX, flappyKoy.DY,
@@ -232,10 +293,8 @@ class Corg {
             this.borgBottom.DY = Math.round((Math.random() * 600) + 300);
             this.borgTop.DY = this.borgBottom.DY - 750;
 
-            console.log(this.borgTop.DY);
         }
-        if (this.borgBottom.DX == 200) {
-            console.log(pontos);
+        if (this.borgBottom.DX == 270) {
             pontos++;
             score.innerHTML = pontos;
         }
@@ -352,12 +411,12 @@ function ColideCorg(koy, obj) {
         koyX < obj.borgTop.DX + obj.borgTop.Width &&
         koyY < obj.borgTop.DY + obj.borgTop.Height + 150) {
         return true;
-    }else if (koyX > obj.borgBottom.DX + 50 &&
+    } else if (koyX > obj.borgBottom.DX + 50 &&
         koyX < obj.borgBottom.DX + obj.borgBottom.Width &&
-        koyY > obj.borgBottom.DY +100) {
+        koyY > obj.borgBottom.DY + 100) {
         return true;
 
-    }else {
+    } else {
         return false;
     }
 
@@ -402,8 +461,11 @@ const Telas = {
         },
 
         spaceDown() {
-            mudaTela(Telas.Jogo)
-            globais.flappyKoy.pula();
+            if (Escolheu) {
+                mudaTela(Telas.Jogo)
+                globais.flappyKoy.pula();
+            }
+
 
         }
 
@@ -474,7 +536,10 @@ const Telas = {
 // fim Telas
 
 function loop() {
-    telaAtiva.desenha();
+    if (telaAtiva.desenha && Escolheu) {
+        telaAtiva.desenha();
+    }
+
 
     if (telaAtiva.atualiza) {
         telaAtiva.atualiza();
@@ -490,9 +555,10 @@ window.addEventListener("keydown", function (tecla) {
 
     } else if (tecla.key == "r" && telaAtiva.rDown) {
         telaAtiva.rDown();
+    } else if (tecla.key == "p") {
+        this.location.reload();
     }
 
-    // console.log(tecla);
 })
 
 mudaTela(Telas.Inicio)
