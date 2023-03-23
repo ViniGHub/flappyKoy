@@ -54,9 +54,9 @@ function setKoy() {
         WidthS: 600,
         Width: 150,
         Height: 200,
-        aceleracao: .035,
+        aceleracao: .2,
         velocidade: 0,
-        pulo: 2.5,
+        pulo: 5,
         DX: (canvas.width / 5),
         DY: (canvas.height / 2),
 
@@ -88,7 +88,7 @@ function setKoy() {
 
         baseIncremento: 1,
         attFrame() {
-            const intervaloFrame = 30;
+            const intervaloFrame = 10;
             const passouInt = frames % intervaloFrame;
 
             if (passouInt == 0) {
@@ -158,7 +158,7 @@ function setChao() {
         },
 
         chaoMove() {
-            const moveChao = 2.5;
+            const moveChao = 5;
             const resetChao = chao.Width;
 
             this.DX -= moveChao;
@@ -176,7 +176,7 @@ class Corg {
         SX: 0,
         SY: 0,
         DX: canvas.width,
-        DY: Math.round((Math.random() * 600) + 300),
+        DY: Math.round((Math.random() * 500) + 300),
         HeightS: 680,
         WidthS: 270,
         Width: 150,
@@ -187,7 +187,7 @@ class Corg {
         SX: 0,
         SY: 0,
         DX: canvas.width,
-        DY: this.borgBottom.DY - 900,
+        DY: this.borgBottom.DY - 750,
         HeightS: 680,
         WidthS: 270,
         Width: 150,
@@ -197,10 +197,10 @@ class Corg {
     desenha() {
         if (this.borgTop.DY <= -590) {
             this.borgTop.DY = -580;
-            this.borgBottom.DY = this.borgTop.DY + 900;
+            this.borgBottom.DY = this.borgTop.DY + 750;
         } else if (this.borgBottom.DY >= 780) {
             this.borgBottom.DY = 770;
-            this.borgTop.DY = this.borgBottom.DY - 900;
+            this.borgTop.DY = this.borgBottom.DY - 750;
 
         }
 
@@ -222,19 +222,19 @@ class Corg {
     };
 
     moveCorg() {
-        this.borgBottom.DX -= 2.5;
-        this.borgTop.DX -= 2.5;
+        this.borgBottom.DX -= 5;
+        this.borgTop.DX -= 5;
 
         if (this.borgBottom.DX == -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
             this.borgBottom.DY = Math.round((Math.random() * 600) + 300);
-            this.borgTop.DY = this.borgBottom.DY - 900;
+            this.borgTop.DY = this.borgBottom.DY - 750;
 
             console.log(this.borgTop.DY);
         }
         if (this.borgBottom.DX == 200) {
-
+            console.log(pontos);
             pontos++;
         }
 
@@ -335,7 +335,7 @@ const reinicia = {
 
 function ColideChao(koy, obj) {
     const koyY = koy.DY + koy.Height;
-    if (koyY >= obj.DY) {
+    if (koyY >= obj.DY + 80) {
         return true;
     } else
         return false;
@@ -346,13 +346,13 @@ function ColideCorg(koy, obj) {
     const koyX = koy.DX + koy.Width;
     const koyY = koy.DY + koy.Height;
 
-    if (koyX > obj.borgTop.DX &&
+    if (koyX > obj.borgTop.DX + 50 &&
         koyX < obj.borgTop.DX + obj.borgTop.Width &&
-        koyY < obj.borgTop.DY + obj.borgTop.Height + 170) {
+        koyY < obj.borgTop.DY + obj.borgTop.Height + 150) {
         return true;
-    }else if (koyX > obj.borgBottom.DX &&
+    }else if (koyX > obj.borgBottom.DX + 50 &&
         koyX < obj.borgBottom.DX + obj.borgBottom.Width &&
-        koyY > obj.borgBottom.DY) {
+        koyY > obj.borgBottom.DY +100) {
         return true;
 
     }else {
@@ -421,13 +421,13 @@ const Telas = {
 
         atualiza() {
             corg[0].moveCorg();
-            if (corg[0].borgBottom.DX <= 1000 || corg[1].borgBottom.DX != canvas.width) {
+            if (corg[0].borgBottom.DX <= 900 || corg[1].borgBottom.DX != canvas.width) {
                 corg[1].moveCorg();
             }
-            if (corg[1].borgBottom.DX <= 1000 || corg[2].borgBottom.DX != canvas.width) {
+            if (corg[1].borgBottom.DX <= 900 || corg[2].borgBottom.DX != canvas.width) {
                 corg[2].moveCorg();
             }
-            if (corg[2].borgBottom.DX <= 1000 || corg[3].borgBottom.DX != canvas.width) {
+            if (corg[2].borgBottom.DX <= 900 || corg[3].borgBottom.DX != canvas.width) {
                 corg[3].moveCorg
             }
             globais.flappyKoy.atualiza();
