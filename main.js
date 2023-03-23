@@ -41,6 +41,7 @@ somImpacto.volume = ".5"
 // Fim sons
 
 let pontos = 0;
+let score = document.querySelector('#score');
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
@@ -236,6 +237,7 @@ class Corg {
         if (this.borgBottom.DX == 200) {
             console.log(pontos);
             pontos++;
+            score.innerHTML = pontos;
         }
 
     }
@@ -459,6 +461,8 @@ const Telas = {
             corg.forEach(element => {
                 element.borgBottom.DX = canvas.width;
                 element.borgTop.DX = canvas.width;
+                pontos = 0;
+                score.innerHTML = pontos;
             });
 
 
