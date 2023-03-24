@@ -17,12 +17,14 @@ body {
 #flappyKoy {
     display: block;
     margin: 0 auto;
+
 }
 
 #score {
     position: absolute;
     top: 20px;
     font-size: 50px;
+    opacity: 0;
 }
 
 #person {
@@ -41,5 +43,6 @@ body {
     width: 500px;
     height: 500px;
     box-shadow: 0 0 25px rgb(0, 76, 95);
+ 
 
 }

@@ -22,12 +22,22 @@ spriteReinicia.src = './Images/reinicia.png';
 
 // Os doente
 
+// Gigo
 const spriteGigo = new Image();
 spriteGigo.src = './Images/gigo.png';
 
+
+// Mon
 const spriteMon = new Image();
 spriteMon.src = './images/mon.png';
 
+const spriteMon1 = new Image();
+spriteMon1.src = './images/mon1.png';
+
+const spriteMon2 = new Image();
+spriteMon2.src = './images/mon2.png';
+
+// Borg
 const spriteCorg = new Image();
 spriteCorg.src = './Images/Corg.png';
 
@@ -71,6 +81,7 @@ btnEsc.addEventListener('click', function () {
 
     if (personEsc != "") {
         telaPerson.style.top = '-1000px';
+        score.style.opacity = '1';
         Escolheu = true;
     }
 
@@ -87,7 +98,7 @@ function setKoy() {
         WidthS: 600,
         Width: 150,
         Height: 200,
-        aceleracao: .2,
+        aceleracao: 0.2,
         velocidade: 0,
         pulo: 2.5,
         DX: (canvas.width / 5),
@@ -129,8 +140,8 @@ function setKoy() {
             if (personEsc == "mon") {
                 this.movimentos = [
                     spriteMon,
-                    spriteMon,
-                    spriteMon
+                    spriteMon1,
+                    spriteMon2
                 ]
                 this.WidthS = 900;
                 return this.movimentos;
@@ -150,7 +161,7 @@ function setKoy() {
 
         baseIncremento: 1,
         attFrame() {
-            const intervaloFrame = 30;
+            const intervaloFrame = 15;
             const passouInt = frames % intervaloFrame;
 
             if (passouInt == 0) {
