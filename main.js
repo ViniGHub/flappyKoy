@@ -57,11 +57,16 @@ somImpacto.src = './audio/impacto.mp3';
 somImpacto.playbackRate = "1";
 somImpacto.volume = ".5"
 
+const somPoint = new Audio();
+somPoint.src = './audio/point.mp3';
+somPoint.playbackRate = "1";
+somPoint.volume = ".5"
+
 // Fim sons
 
 // variaveis gerais
 let personEsc = "koki";
-let velocidadeGame = 2.5;
+let velocidadeGame = 5;
 let pontos = 0;
 let score = document.querySelector('#score');
 
@@ -98,7 +103,7 @@ function setKoy() {
         WidthS: 600,
         Width: 150,
         Height: 200,
-        aceleracao: 0.2,
+        aceleracao: velocidadeGame /50,
         velocidade: 0,
         pulo: 2.5,
         DX: (canvas.width / 5),
@@ -231,7 +236,7 @@ function setChao() {
         },
 
         chaoMove() {
-            const moveChao = 5;
+            const moveChao = velocidadeGame;
             const resetChao = chao.Width;
 
             this.DX -= moveChao;
@@ -295,8 +300,8 @@ class Corg {
     };
 
     moveCorg() {
-        this.borgBottom.DX -= 5;
-        this.borgTop.DX -= 5;
+        this.borgBottom.DX -= velocidadeGame;
+        this.borgTop.DX -= velocidadeGame;
 
         if (this.borgBottom.DX == -200) {
             this.borgBottom.DX = canvas.width;
@@ -308,6 +313,7 @@ class Corg {
         if (this.borgBottom.DX == 270) {
             pontos++;
             score.innerHTML = pontos;
+            somPoint.play();
         }
 
     }
