@@ -224,9 +224,6 @@ function setKoy() {
 
         desenha() {
             this.attFrame();
-            contexto.fillStyle= 'red';
-            contexto.strokeRect(this.DX, this.DY, this.Width, this.Height);
-            contexto.fill();
 
             this.definePerson();
             contexto.drawImage(
