@@ -28,7 +28,7 @@ spriteGigo.src = './Images/gigo.png';
 
 
 // Jame
-const spritejame =  new Image();
+const spritejame = new Image();
 spritejame.src = './Images/jame.png';
 
 // Mon
@@ -342,20 +342,24 @@ class Corg {
         this.borgBottom.DX -= velocidadeGame;
         this.borgTop.DX -= velocidadeGame;
 
-        console.log(this.borgBottom.DX);
-
         if (this.borgBottom.DX < -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
             this.borgBottom.DY = Math.round((Math.random() * 500) + 300);
             this.borgTop.DY = this.borgBottom.DY - 750;
+            
+        }
+
+        if (this.borgBottom.DX > canvas.width / 5 - 2.5 && this.borgBottom.DX < canvas.width / 5 + 2.5) {
+            this.borgBottom.DX = canvas.width / 5;
 
         }
-        if (this.borgBottom.DX == 270) {
-            console.log("ola");
+
+        if (this.borgBottom.DX == canvas.width / 5) {
             pontos++;
             score.innerHTML = pontos;
             somPoint.play();
+
         }
 
     }
@@ -418,7 +422,7 @@ let fundo = {
 
         if (this.DX <= -500) {
             this.DX = 0;
-            
+
         }
 
     }
@@ -569,7 +573,7 @@ const Telas = {
 
         atualiza() {
 
-                corg[0].moveCorg();
+            corg[0].moveCorg();
             if (corg[0].borgBottom.DX <= canvas.width * 0.66 || corg[1].borgBottom.DX != canvas.width) {
                 corg[1].moveCorg();
             }
@@ -579,7 +583,7 @@ const Telas = {
             if (corg[2].borgBottom.DX <= canvas.width * 0.66 || corg[3].borgBottom.DX != canvas.width) {
                 corg[3].moveCorg
             }
-        
+
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
             fundo.moveFundo();
@@ -633,8 +637,8 @@ function loop() {
     if (telaAtiva.atualiza) {
         telaAtiva.atualiza();
     }
-    
-    
+
+
 
     frames++;
     requestAnimationFrame(loop);
