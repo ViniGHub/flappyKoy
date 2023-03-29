@@ -85,8 +85,8 @@ let telaPerson = document.querySelector('#telaPerson');
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
-// canvas.height = window.innerHeight;
-// canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
 
 
 // Fim variaveis gerais
@@ -342,7 +342,9 @@ class Corg {
         this.borgBottom.DX -= velocidadeGame;
         this.borgTop.DX -= velocidadeGame;
 
-        if (this.borgBottom.DX == -200) {
+        console.log(this.borgBottom.DX);
+
+        if (this.borgBottom.DX < -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
             this.borgBottom.DY = Math.round((Math.random() * 500) + 300);
@@ -350,6 +352,7 @@ class Corg {
 
         }
         if (this.borgBottom.DX == 270) {
+            console.log("ola");
             pontos++;
             score.innerHTML = pontos;
             somPoint.play();
@@ -393,8 +396,33 @@ let fundo = {
             this.DX + this.Width * 2, this.DY,
             this.Width, this.Height
         );
+        contexto.drawImage(
+            spriteFundo,
+            this.SX, this.SY,
+            this.WidthS, this.HeightS,
+            this.DX + this.Width * 3, this.DY,
+            this.Width, this.Height
+        );
+        contexto.drawImage(
+            spriteFundo,
+            this.SX, this.SY,
+            this.WidthS, this.HeightS,
+            this.DX + this.Width * 4, this.DY,
+            this.Width, this.Height
+        );
+
+    },
+
+    moveFundo() {
+        this.DX -= velocidadeGame / 10;
+
+        if (this.DX <= -500) {
+            this.DX = 0;
+            
+        }
 
     }
+
 }
 
 const getReady = {
@@ -540,18 +568,22 @@ const Telas = {
         },
 
         atualiza() {
-            corg[0].moveCorg();
-            if (corg[0].borgBottom.DX <= 900 || corg[1].borgBottom.DX != canvas.width) {
+
+                corg[0].moveCorg();
+            if (corg[0].borgBottom.DX <= canvas.width * 0.66 || corg[1].borgBottom.DX != canvas.width) {
                 corg[1].moveCorg();
             }
-            if (corg[1].borgBottom.DX <= 900 || corg[2].borgBottom.DX != canvas.width) {
+            if (corg[1].borgBottom.DX <= canvas.width * 0.66 || corg[2].borgBottom.DX != canvas.width) {
                 corg[2].moveCorg();
             }
-            if (corg[2].borgBottom.DX <= 900 || corg[3].borgBottom.DX != canvas.width) {
+            if (corg[2].borgBottom.DX <= canvas.width * 0.66 || corg[3].borgBottom.DX != canvas.width) {
                 corg[3].moveCorg
             }
+        
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
+            fundo.moveFundo();
+
 
         },
 
