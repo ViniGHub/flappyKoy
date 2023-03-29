@@ -27,6 +27,10 @@ const spriteGigo = new Image();
 spriteGigo.src = './Images/gigo.png';
 
 
+// Jame
+const spritejame =  new Image();
+spritejame.src = './Images/jame.png';
+
 // Mon
 const spriteMon = new Image();
 spriteMon.src = './images/mon.png';
@@ -59,7 +63,7 @@ somImpacto.volume = ".5"
 
 const somPoint = new Audio();
 somPoint.src = './audio/point.mp3';
-somPoint.playbackRate = "1";
+somPoint.playbackRate = "1.5";
 somPoint.volume = ".5"
 
 // Fim sons
@@ -67,7 +71,10 @@ somPoint.volume = ".5"
 // variaveis gerais
 let personEsc = "koki";
 let velocidadeGame = 5;
+let aceleracaoGame = 0.1;
+let chaoAdd = 0;
 let pontos = 0;
+let maioPont = 0;
 let score = document.querySelector('#score');
 
 let Escolheu = false;
@@ -78,6 +85,10 @@ let telaPerson = document.querySelector('#telaPerson');
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
 const contexto = canvas.getContext("2d");
+// canvas.height = window.innerHeight;
+// canvas.width = window.innerWidth;
+
+
 // Fim variaveis gerais
 
 // Definição personagem
@@ -102,8 +113,8 @@ function setKoy() {
         HeightS: 735,
         WidthS: 600,
         Width: 150,
-        Height: 200,
-        aceleracao: velocidadeGame /50,
+        Height: 150,
+        aceleracao: aceleracaoGame,
         velocidade: 0,
         pulo: 2.5,
         DX: (canvas.width / 5),
@@ -129,7 +140,11 @@ function setKoy() {
 
         frameAtual: 1,
 
-        movimentos: [],
+        movimentos: [
+            spriteKoy,
+            spriteKoy1,
+            spriteKoy2
+        ],
 
         definePerson() {
             if (personEsc == "koki") {
@@ -137,8 +152,8 @@ function setKoy() {
                     spriteKoy,
                     spriteKoy1,
                     spriteKoy2
-
                 ];
+                chaoAdd = 55;
                 return this.movimentos;
             }
 
@@ -148,7 +163,11 @@ function setKoy() {
                     spriteMon1,
                     spriteMon2
                 ]
-                this.WidthS = 900;
+                this.WidthS = 875;
+                this.HeightS = 500;
+                this.Height = 100;
+                this.Width = 100;
+                chaoAdd = 20;
                 return this.movimentos;
             }
 
@@ -158,10 +177,29 @@ function setKoy() {
                     spriteGigo,
                     spriteGigo
                 ]
-
+                this.WidthS = 320;
+                this.HeightS = 315;
+                this.Height = 100;
+                this.Width = 100;
+                chaoAdd = 20;
                 return this.movimentos;
             }
 
+            if (personEsc == "jame") {
+                this.movimentos = [
+                    spritejame,
+                    spritejame,
+                    spritejame
+                ]
+
+                this.WidthS = 490;
+                this.HeightS = 630;
+                this.Height = 100;
+                this.Width = 100;
+                chaoAdd = 20;
+
+                return this.movimentos;
+            }
         },
 
         baseIncremento: 1,
@@ -185,10 +223,14 @@ function setKoy() {
         },
 
         desenha() {
-            this.definePerson();
             this.attFrame();
+            contexto.fillStyle= 'red';
+            contexto.strokeRect(this.DX, this.DY, this.Width, this.Height);
+            contexto.fill();
+
+            this.definePerson();
             contexto.drawImage(
-                this.definePerson()[this.frameAtual],
+                this.movimentos[this.frameAtual],
                 flappyKoy.SX, flappyKoy.SY,
                 flappyKoy.WidthS, flappyKoy.HeightS,
                 flappyKoy.DX, flappyKoy.DY,
@@ -306,7 +348,7 @@ class Corg {
         if (this.borgBottom.DX == -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
-            this.borgBottom.DY = Math.round((Math.random() * 600) + 300);
+            this.borgBottom.DY = Math.round((Math.random() * 500) + 300);
             this.borgTop.DY = this.borgBottom.DY - 750;
 
         }
@@ -413,7 +455,7 @@ const reinicia = {
 
 function ColideChao(koy, obj) {
     const koyY = koy.DY + koy.Height;
-    if (koyY >= obj.DY + 80) {
+    if (koyY >= obj.DY + chaoAdd) {
         return true;
     } else
         return false;
@@ -424,13 +466,13 @@ function ColideCorg(koy, obj) {
     const koyX = koy.DX + koy.Width;
     const koyY = koy.DY + koy.Height;
 
-    if (koyX > obj.borgTop.DX + 50 &&
+    if (koyX > obj.borgTop.DX + chaoAdd &&
         koyX < obj.borgTop.DX + obj.borgTop.Width &&
-        koyY < obj.borgTop.DY + obj.borgTop.Height + 150) {
+        koy.DY < obj.borgTop.DY + obj.borgTop.Height - chaoAdd) {
         return true;
-    } else if (koyX > obj.borgBottom.DX + 50 &&
+    } else if (koyX > obj.borgBottom.DX + chaoAdd &&
         koyX < obj.borgBottom.DX + obj.borgBottom.Width &&
-        koyY > obj.borgBottom.DY + 100) {
+        koyY > obj.borgBottom.DY + chaoAdd) {
         return true;
 
     } else {
@@ -553,14 +595,17 @@ const Telas = {
 // fim Telas
 
 function loop() {
+    contexto.clearRect(0, 0, 2000, 2000);
+
     if (telaAtiva.desenha && Escolheu) {
         telaAtiva.desenha();
     }
 
-
     if (telaAtiva.atualiza) {
         telaAtiva.atualiza();
     }
+    
+    
 
     frames++;
     requestAnimationFrame(loop);
