@@ -70,8 +70,8 @@ somPoint.volume = ".5"
 
 // variaveis gerais
 let personEsc = "koki";
-let velocidadeGame = 5;
-let aceleracaoGame = 0.1;
+let velocidadeGame = 6; // Rapido 6 / Devagar 2.5
+let aceleracaoGame = 0.07; // Rapido 0.07 / Devagar 0.05
 let chaoAdd = 0;
 let pontos = 0;
 let maioPont = 0;
@@ -288,12 +288,14 @@ function setChao() {
     return chao;
 };
 
+console.log(canvas.height / 2);
+
 class Corg {
     borgBottom = {
         SX: 0,
         SY: 0,
         DX: canvas.width,
-        DY: Math.round((Math.random() * 500) + 300),
+        DY: Math.round((Math.random() * canvas.height / 2) + 300),
         HeightS: 680,
         WidthS: 270,
         Width: 150,
@@ -345,7 +347,7 @@ class Corg {
         if (this.borgBottom.DX < -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
-            this.borgBottom.DY = Math.round((Math.random() * 500) + 300);
+            this.borgBottom.DY = Math.round((Math.random() * canvas.height / 2) + 300);
             this.borgTop.DY = this.borgBottom.DY - 750;
             
         }
