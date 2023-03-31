@@ -125,7 +125,7 @@ function setKoy() {
         DY: (canvas.height / 2),
 
         atualiza() {
-            if (ColideChao(flappyKoy, globais.chao) || ColideCorg(flappyKoy, corg[0]) || ColideCorg(flappyKoy, corg[1]) || ColideCorg(flappyKoy, corg[2]) || ColideCorg(flappyKoy, corg[3])) {
+            if (ColideChao(flappyKoy, globais.chao) || ColideCorg(flappyKoy, corg[0]) || ColideCorg(flappyKoy, corg[1]) || ColideCorg(flappyKoy, corg[2])) {
                 mudaTela(Telas.Reinicio)
                 somImpacto.play();
 
@@ -292,8 +292,6 @@ function setChao() {
     return chao;
 };
 
-console.log(canvas.height - 300);
-
 class Corg {
     borgBottom = {
         SX: 0,
@@ -372,7 +370,7 @@ class Corg {
 
 };
 
-let corg = [new Corg(), new Corg(), new Corg(), new Corg()];
+let corg = [new Corg(), new Corg(), new Corg()];
 
 let fundo = {
     SX: 0,
@@ -573,7 +571,6 @@ const Telas = {
             corg[0].desenha();
             corg[1].desenha();
             corg[2].desenha();
-            corg[3].desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
 
@@ -581,17 +578,16 @@ const Telas = {
 
         atualiza() {
 
-            corg[0].moveCorg();
-            if (corg[0].borgBottom.DX <= canvas.width * 0.66 || corg[1].borgBottom.DX != canvas.width) {
+            if (corg[2].borgBottom.DX <= canvas.width * 0.60 || corg[0].borgBottom.DX > -190) {
+                corg[0].moveCorg();
+            }
+            if (corg[0].borgBottom.DX <= canvas.width * 0.60 || corg[1].borgBottom.DX != canvas.width) {
                 corg[1].moveCorg();
             }
-            if (corg[1].borgBottom.DX <= canvas.width * 0.66 || corg[2].borgBottom.DX != canvas.width) {
+            if (corg[1].borgBottom.DX <= canvas.width * 0.60 || corg[2].borgBottom.DX != canvas.width) {
                 corg[2].moveCorg();
             }
-            if (corg[2].borgBottom.DX <= canvas.width * 0.66 || corg[3].borgBottom.DX != canvas.width) {
-                corg[3].moveCorg
-            }
-
+            
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
             fundo.moveFundo();
@@ -612,7 +608,6 @@ const Telas = {
             corg[0].desenha();
             corg[1].desenha();
             corg[2].desenha();
-            corg[3].desenha();
             globais.chao.desenha();
             globais.flappyKoy.desenha();
             reinicia.desenha();
