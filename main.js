@@ -1,4 +1,6 @@
 // Declaração sprites
+
+// Koki
 const spriteKoy = new Image();
 spriteKoy.src = './Images/Koy.png';
 
@@ -7,6 +9,8 @@ spriteKoy1.src = './Images/Koy1.png';
 
 const spriteKoy2 = new Image();
 spriteKoy2.src = './Images/Koy2.png';
+
+// Fim koki
 
 const spriteChao = new Image();
 spriteChao.src = './Images/chao.png';
@@ -70,8 +74,8 @@ somPoint.volume = ".5"
 
 // variaveis gerais
 let personEsc = "koki";
-let velocidadeGame = 6; // Rapido 6 / Devagar 2.5
-let aceleracaoGame = 0.07; // Rapido 0.07 / Devagar 0.05
+let velocidadeGame = 7; // Rapido 7 / Devagar 3
+let aceleracaoGame = 0.05; // Rapido 0.07 / Devagar 0.05
 let chaoAdd = 0;
 let pontos = 0;
 let maioPont = 0;
@@ -288,14 +292,14 @@ function setChao() {
     return chao;
 };
 
-console.log(canvas.height / 2);
+console.log(canvas.height - 300);
 
 class Corg {
     borgBottom = {
         SX: 0,
         SY: 0,
         DX: canvas.width,
-        DY: Math.round((Math.random() * canvas.height / 2) + 300),
+        DY: Math.round((Math.random() * (canvas.height - 150) + 150)),
         HeightS: 680,
         WidthS: 270,
         Width: 150,
@@ -347,7 +351,7 @@ class Corg {
         if (this.borgBottom.DX < -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
-            this.borgBottom.DY = Math.round((Math.random() * canvas.height / 2) + 300);
+            this.borgBottom.DY = Math.round((Math.random() * (canvas.height - 150) + 150));
             this.borgTop.DY = this.borgBottom.DY - 750;
             
         }
@@ -547,6 +551,8 @@ const Telas = {
 
         atualiza() {
             globais.chao.chaoMove();
+            fundo.moveFundo();
+
 
         },
 
@@ -619,6 +625,9 @@ const Telas = {
                 element.borgTop.DX = canvas.width;
                 pontos = 0;
                 score.innerHTML = pontos;
+
+                canvas.height = window.innerHeight;
+                canvas.width = window.innerWidth;
             });
 
 
@@ -657,6 +666,14 @@ window.addEventListener("keydown", function (tecla) {
     }
 
 })
+
+window.onmousedown = function (params) {
+    if (telaAtiva.spaceDown) {
+        telaAtiva.spaceDown();
+        
+    }
+   
+} 
 
 mudaTela(Telas.Inicio)
 loop();
