@@ -75,7 +75,7 @@ somPoint.volume = ".5"
 // variaveis gerais
 let personEsc = "koki";
 let velocidadeGame = 7; // Rapido 7 / Devagar 3
-let aceleracaoGame = 0.06; // Rapido 0.07 / Devagar 0.05
+let aceleracaoGame = 0.15; // Rapido 0.07 / Devagar 0.05
 let chaoAdd = 0;
 let pontos = 0;
 let highScore = 0;
@@ -124,7 +124,7 @@ function setKoy() {
         Height: 150,
         aceleracao: aceleracaoGame,
         velocidade: 0,
-        pulo: 2.5,
+        pulo: 3.5,
         DX: (canvas.width / 5),
         DY: (canvas.height / 2),
 
