@@ -1,4 +1,4 @@
-body {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -29,11 +29,13 @@ body {
 
 #person {
     text-align: center;
+    width: 50%;
+    margin-bottom: 20px;
+
 }
 
 #telaPerson {
-    display: grid;
-    place-content: center;
+    display: block;
     position: absolute;
     backdrop-filter: blur(15px);
     border: 2px dashed white;
@@ -43,6 +45,21 @@ body {
     width: 500px;
     height: 500px;
     box-shadow: 0 0 25px rgb(0, 76, 95);
- 
+
+}
+
+#telaDados {
+    justify-content: center;
+    position: absolute;
+    background: rgb(173, 142, 0);
+    width: 500px;
+    height: 300px;
+    box-shadow: 0 0 25px rgb(0, 76, 95);
+    border: 5px solid;
+    text-align: center;
+    font-size: 25px;
+    z-index: -1;
+    margin-top: 100px;
+
 
 }

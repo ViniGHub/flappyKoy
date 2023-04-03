@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <div id="telaPerson">
-            <label for="person">Escolha o seu personagem</label>
+            <label style="font-size: 2vw; margin-top: 40%; margin-bottom: 5%;" for="person">Escolha o seu personagem</label>
             <select name="person" id="person">
                 <option disabled selected value="">Personagens</option>
                 <option value="koki">koki</option>
@@ -33,7 +33,22 @@
                 <option value="jame">jame</option>
                 <option disabled value="cadrinks">cadrinks</option>
             </select>
-            <input value="Escolher" id="btnPerson" type="button">
+            <br>
+            <input style="width: 20%;" value="Escolher" id="btnPerson" type="button">
+
+
+        </div>
+
+        <div id="telaDados">
+            <div style="border: 1px solid black; width: 100%; height: 50%; display: grid; place-content: center;">
+                <p style="font-weight: bolder;">Pontuação da rodada</p>
+                <p style="color: white; font-size: 30px;" id="pontRodada">0</p>
+            </div>
+            <div style="border: 1px solid black; height: 50%; display: grid; place-content: center;">
+                <p style="font-weight: bolder;">Maior pontuação</p>
+                <p style="color: white; font-size: 30px;" id="maiorPont">0</p>
+            </div>
+            
         </div>
 
 

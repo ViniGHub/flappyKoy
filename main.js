@@ -75,16 +75,20 @@ somPoint.volume = ".5"
 // variaveis gerais
 let personEsc = "koki";
 let velocidadeGame = 7; // Rapido 7 / Devagar 3
-let aceleracaoGame = 0.05; // Rapido 0.07 / Devagar 0.05
+let aceleracaoGame = 0.06; // Rapido 0.07 / Devagar 0.05
 let chaoAdd = 0;
 let pontos = 0;
-let maioPont = 0;
+let highScore = 0;
 let score = document.querySelector('#score');
+let maiorPont = document.querySelector("#maiorPont");
+let pontRod = document.querySelector("#pontRodada");
+
 
 let Escolheu = false;
 let btnEsc = document.querySelector('#btnPerson');
 let person = document.querySelector('#person');
 let telaPerson = document.querySelector('#telaPerson');
+let telaDados = document.querySelector("#telaDados");
 
 let frames = 0;
 const canvas = document.querySelector("#flappyKoy");
@@ -100,8 +104,8 @@ btnEsc.addEventListener('click', function () {
     personEsc = person.value;
 
     if (personEsc != "") {
-        telaPerson.style.top = '-1000px';
-        score.style.opacity = '1';
+        telaPerson.style.zIndex = -1;
+        score.style.opacity = 1;
         Escolheu = true;
     }
 
@@ -128,6 +132,12 @@ function setKoy() {
             if (ColideChao(flappyKoy, globais.chao) || ColideCorg(flappyKoy, corg[0]) || ColideCorg(flappyKoy, corg[1]) || ColideCorg(flappyKoy, corg[2])) {
                 mudaTela(Telas.Reinicio)
                 somImpacto.play();
+                telaDados.style.zIndex = 0;
+                pontRod.innerHTML = pontos;
+                if (pontos > highScore) {
+                    highScore = pontos;
+                }
+                maiorPont.innerHTML = highScore;
 
             } else {
                 this.velocidade += this.aceleracao;
@@ -297,7 +307,7 @@ class Corg {
         SX: 0,
         SY: 0,
         DX: canvas.width,
-        DY: Math.round((Math.random() * (canvas.height - 150) + 150)),
+        DY: Math.round((Math.random() * (canvas.height - 350) + 200)),
         HeightS: 680,
         WidthS: 270,
         Width: 150,
@@ -316,11 +326,8 @@ class Corg {
     }
 
     desenha() {
-        if (this.borgTop.DY <= -590) {
-            this.borgTop.DY = -580;
-            this.borgBottom.DY = this.borgTop.DY + 750;
-        } else if (this.borgBottom.DY >= 780) {
-            this.borgBottom.DY = 770;
+        if (this.borgBottom.DY >= canvas.height - 150) {
+            this.borgBottom.DY = canvas.height - 160;
             this.borgTop.DY = this.borgBottom.DY - 750;
 
         }
@@ -349,9 +356,9 @@ class Corg {
         if (this.borgBottom.DX < -200) {
             this.borgBottom.DX = canvas.width;
             this.borgTop.DX = canvas.width;
-            this.borgBottom.DY = Math.round((Math.random() * (canvas.height - 150) + 150));
+            this.borgBottom.DY = Math.round((Math.random() * (canvas.height - 150) + 200));
             this.borgTop.DY = this.borgBottom.DY - 750;
-            
+
         }
 
         if (this.borgBottom.DX > canvas.width / 5 - 2.5 && this.borgBottom.DX < canvas.width / 5 + 2.5) {
@@ -567,6 +574,7 @@ const Telas = {
 
     Jogo: {
         desenha() {
+
             fundo.desenha();
             corg[0].desenha();
             corg[1].desenha();
@@ -587,7 +595,7 @@ const Telas = {
             if (corg[1].borgBottom.DX <= canvas.width * 0.60 || corg[2].borgBottom.DX != canvas.width) {
                 corg[2].moveCorg();
             }
-            
+
             globais.flappyKoy.atualiza();
             globais.chao.chaoMove();
             fundo.moveFundo();
@@ -623,6 +631,7 @@ const Telas = {
 
                 canvas.height = window.innerHeight;
                 canvas.width = window.innerWidth;
+                telaDados.style.zIndex = -1;
             });
 
 
@@ -665,10 +674,10 @@ window.addEventListener("keydown", function (tecla) {
 window.onmousedown = function (params) {
     if (telaAtiva.spaceDown) {
         telaAtiva.spaceDown();
-        
+
     }
-   
-} 
+
+}
 
 mudaTela(Telas.Inicio)
 loop();
