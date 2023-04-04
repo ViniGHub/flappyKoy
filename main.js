@@ -75,7 +75,7 @@ somPoint.volume = ".5"
 // variaveis gerais
 let personEsc = "koki";
 let velocidadeGame = 7; // Rapido 7 / Devagar 3
-let aceleracaoGame = 0.15; // Rapido 0.07 / Devagar 0.05
+let aceleracaoGame = 0.15; // Rapido 0.15 / Devagar 0.05
 let chaoAdd = 0;
 let pontos = 0;
 let highScore = 0;
